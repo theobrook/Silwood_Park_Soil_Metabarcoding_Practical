@@ -6,6 +6,8 @@ In this practical, we will go from raw sequences to community-level analyses. Th
 
 This practical is an adaptation of the [DADA2 Pipeline Tutorial (1.16)](https://benjjneb.github.io/dada2/tutorial.html), a useful resource for beginners in microbial bioinformatics.
 
+If you have any questions, please reach out to Theodore Brook (`T.Brook@kew.org`).
+
 The specific aims are to:
 1. Understand the output of a short-read sequencing machine
 2. Perform quality control on raw sequencing reads
