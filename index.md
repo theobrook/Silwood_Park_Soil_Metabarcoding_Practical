@@ -41,7 +41,7 @@ This practical relies on a basic understanding of the R and RStudio. I recommend
 
 We extracted DNA from the soil samples using the [Qiagen DNeasy PowerSoil Pro Kit](https://www.qiagen.com/us/products/discovery-and-translational-research/dna-rna-purification/dna-purification/microbial-dna/dneasy-powersoil-pro-kit) and sequenced the 16S rRNA gene. **TBC!!!** There is a fair amount of data, so you might want to consider downloading it to your Imperial OneDrive account.
 
-Download the GitHub repository from [here](https://github.com/theobrook/Silwood_Park_Soil_Metabarcoding_Practical) and move the data directory (folder) to somewhere on your device. Unzip the directory to extract its contents.
+The first step is to download the GitHub repository from [here](https://github.com/theobrook/Silwood_Park_Soil_Metabarcoding_Practical) and move the data directory (folder) to somewhere on your device. Unzip the directory to extract its contents.
 
 N.B. ou might want to use OneDrive as there is a large amount of data (**XGB - TBC!!!**).
 
