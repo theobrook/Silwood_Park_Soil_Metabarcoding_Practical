@@ -59,7 +59,7 @@ save_path <- "path/to/somewhere/on/your/computer/or/OneDrive" # do not use the s
 
 ```r
 # Install libraries
-install.packages("data2") # a bioinformatic package to denoise amplicon sequencing data and infer ASVs
+install.packages("dada2") # a bioinformatic package to denoise amplicon sequencing data and infer ASVs
 install.packages("phyloseq") # a bioinformatic package to import, store, analyse, and plot microbiome (and phylogenetic) sequencing data
 install.packages("ggplot2") # a package for plotting
 
