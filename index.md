@@ -67,9 +67,6 @@ Amplicon sequencing such as this usually reads in both directions, creating forw
 The data must be read into the R environment. First point R at the folder containing your downloaded FASTQ files, then list and pair up the forward and reverse reads:
 
 ```r
-# Set the path to your data folder (adjust this to wherever you unzipped/cloned the data)
-path <- "data"
-
 # Forward and reverse fastq filenames have format: SAMPLENAME_1.fq and SAMPLENAME_2.fq
 fnFs <- sort(list.files(path, pattern="_1.fq", full.names = TRUE))
 fnRs <- sort(list.files(path, pattern="_2.fq", full.names = TRUE))
