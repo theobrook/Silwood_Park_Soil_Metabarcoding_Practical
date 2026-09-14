@@ -134,6 +134,7 @@ for (i in seq_along(fnRs)) {
 
 Now we have an idea of the quality of our sequences, we need to filter and trim sequences to remove low quality regions.
 
+```r
 # Place filtered files in filtered/ subdirectory
 filtFs <- file.path(save_path, "filtered", paste0(sample.names, "_F_filt.fastq.gz"))
 filtRs <- file.path(save_path, "filtered", paste0(sample.names, "_R_filt.fastq.gz"))
@@ -163,4 +164,4 @@ filtRs <- sort(list.files(filt_path, pattern="_R_filt.fastq.gz", full.names = TR
 # Extract sample names from filtered files
 sample.names <- sapply(strsplit(basename(filtFs), "_"), 
                        function(x) paste(x[1:(length(x)-3)], collapse="_"))
-
+```
