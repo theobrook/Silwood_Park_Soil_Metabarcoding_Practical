@@ -46,6 +46,7 @@ list.files(path)
 # Set your save_path, this is where all your outputs will be saved
 
 save_path <- "path/to/somewhere/on/your/computer/or/OneDrive" # Not the same place as your path above
+
 ```
 
 ## Task 2: Install and load packages (libraries)
@@ -60,6 +61,7 @@ install.packages(ggplot2)
 
 library(dada2)
 library(ggplot2)
+
 ```
 
 ## Task 3: Load data
@@ -73,6 +75,7 @@ fnRs <- sort(list.files(path, pattern="_2.fq", full.names = TRUE))
 # Extract sample names
 
 sample.names <- sapply(strsplit(basename(fnFs), "_"), function(x) paste(x[-length(x)], collapse = "_"))
+
 ```
 
 ## Task 4: Inspect read quality profiles ##
@@ -99,4 +102,5 @@ for (i in 1:31) {
   ggsave(filename = file.path(save_path, paste0("quality_profiles/quality_profile_reverse_", i, ".png")), 
          plot = p, width = 10, height = 7)
 }
+
 ```
