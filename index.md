@@ -4,7 +4,7 @@
 
 In this practical, we will go from raw sequences to community-level analyses. The samples used in this study were collected from the [Ecological Fractal Network](https://ecofracnetwork.github.io) points at Silwood Park. You can see the specific collection points [here](https://www.google.com/maps/d/viewer?mid=1gYaoOn5ypAK2B-bL8uXjdSTMu4CWCyI&ll=51.40958062885105%2C-0.6467416439178342&z=15).
 
-This practical is an adaptation of the [DADA2 Pipeline Tutorial (1.16)](https://benjjneb.github.io/dada2/tutorial.html), a useful resource for beginners in microbial bioinformatics.
+This practical is an adaptation of the [`DADA2` Pipeline Tutorial (1.16)](https://benjjneb.github.io/dada2/tutorial.html), a useful resource for beginners in microbial bioinformatics.
 
 If you have any questions, please reach out to Theodore Brook (`T.Brook@kew.org`).
 
@@ -30,6 +30,14 @@ Here we are using 16S rRNA **TBC!!!** gene amplicon sequencing data generated on
 ### Using R
 
 This practical relies on a basic understanding of the R and RStudio. I recommend that you create a new RStudio environment to run this analysis within.
+
+### Useful websites
+- [Stack Overflow](https://stackoverflow.com/) - a site for programmers to discuss issues/problems
+- [DADA2 website](https://benjjneb.github.io/dada2/) - details of the `DADA2` package
+- [phyloseq website](https://joey711.github.io/phyloseq/) - details of the `phyloseq` package
+- [ggplot2 website](https://ggplot2.tidyverse.org/) - details of the `ggplot2` package
+
+*LLMs such as Claude and ChatGPT can be very useful but be careful to double check that you understand what they are doing (and that they are doing what you want)!*
 
 ## Task 1: Download data
 
