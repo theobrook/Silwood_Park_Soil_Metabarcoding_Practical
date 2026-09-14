@@ -32,12 +32,11 @@ This practical relies on a basic understanding of the R and RStudio. I recommend
 We extracted DNA from the soil samples using the [Qiagen DNeasy PowerSoil Pro Kit](https://www.qiagen.com/us/products/discovery-and-translational-research/dna-rna-purification/dna-purification/microbial-dna/dneasy-powersoil-pro-kit) and sequenced the 16S rRNA gene. **TBC!!!** There is a fair amount of data, so you might want to consider downloading it to your Imperial OneDrive account.
 
 ```r
-
 # Set your path - this is where your data will be downloaded to
 path <- "path/to/somewhere/on/your/computer/or/OneDrive"
 
 # Download data
-wget https://raw.githubusercontent.com/theobrook/Silwood_Park_Soil_Metabarcoding_Practical/main/data/reads.fastq.gz # If you struggle with wget, you can download it manually to your desired folder
+wget https://raw.githubusercontent.com/theobrook/Silwood_Park_Soil_Metabarcoding_Practical/main/data/reads.fastq.gz # if you struggle with wget, you can download it manually to your desired folder
 
 # Check the data downloaded successfully
 list.files(path)
@@ -51,8 +50,9 @@ save_path <- "path/to/somewhere/on/your/computer/or/OneDrive" # Not the same pla
 
 ```r
 # Install libraries
-install.packages(data2)
-install.packages(ggplot2)
+install.packages("data2") # a bioinformatic package to denoise amplicon sequencing data and infer ASVs
+install.packages("phyloseq") # a bioinformatic package to import, store, analyse, and plot microbiome (and phylogenetic) sequencing data
+install.packages("ggplot2") # a package for plotting
 
 # Load libraries
 library(dada2)
@@ -87,29 +87,38 @@ length(fnFs) == length(fnRs)
 
 If `length(fnFs)` and `length(fnRs)` don't match, it usually means a forward or reverse file is missing for one sample — worth checking your `data` folder before continuing.
 
-## Task 4: Inspect read quality profiles ##
+## Task 4: Inspect read quality profiles
 
-It is important to inspect the read profiles to understand where to clip the data... **TBC!!!**
+Before we can filter and trim the reads, we need to know where sequencing quality starts to drop off along each read. DADA2's `plotQualityProfile()` plots this for you.
+
+The grey heatmap shows the frequency of each quality score at each position along the read, the green line is the mean quality score at that position, the orange line is the median, and the orange dashed lines show the 25th and 75th quantiles. As a rule of thumb, quality tends to decline towards the end of the read and you are looking for the position where the mean quality (green line) drops below ~Q30, since that's where you'll want to truncate reads in the next task.
 
 ```r
-# Forward reads
-quality_profiles_fnFs <- plotQualityProfile(fnFs[1:66])
+# Set where quality profile plots will be saved
+dir.create(file.path(save_path, "quality_profiles"), recursive = TRUE, showWarnings = FALSE)
 
-# Save - each sample as a separate PNG
-for (i in 1:31) {
+# Forward reads: quick overview across all samples at once
+quality_profiles_fnFs <- plotQualityProfile(fnFs)
+quality_profiles_fnFs
+
+# Save each sample's forward-read profile as its own PNG
+for (i in seq_along(fnFs)) {
   p <- plotQualityProfile(fnFs[i])
-  ggsave(filename = file.path(save_path, paste0("quality_profiles/quality_profile_forward_", i, ".png")), 
+  ggsave(filename = file.path(save_path, "quality_profiles", paste0("quality_profile_forward_", sample.names[i], ".png")),
          plot = p, width = 10, height = 7)
 }
 
-# Reverse reads
-quality_profiles_fnRs <- plotQualityProfile(fnRs[1:66])
+# Reverse reads: quick overview across all samples at once
+quality_profiles_fnRs <- plotQualityProfile(fnRs)
+quality_profiles_fnRs
 
-# Save - each sample as a separate PNG
-for (i in 1:31) {
+# Save each sample's reverse-read profile as its own PNG
+for (i in seq_along(fnRs)) {
   p <- plotQualityProfile(fnRs[i])
-  ggsave(filename = file.path(save_path, paste0("quality_profiles/quality_profile_reverse_", i, ".png")), 
+  ggsave(filename = file.path(save_path, "quality_profiles", paste0("quality_profile_reverse_", sample.names[i], ".png")),
          plot = p, width = 10, height = 7)
 }
 
 ```
+
+**Checkpoint:** Look at your saved quality profiles. At roughly what position do the forward reads start to drop in quality? What about the reverse reads (these are usually a bit worse — can you think of why that might be)? Make a note of these positions, as you'll need them in the next task to set trimming lengths.
