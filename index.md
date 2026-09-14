@@ -29,7 +29,24 @@ This practical relies on a basic understanding of the R language and R studio. I
 
 ## Task 1: Download data
 
-[Instructions and link for where students get the data]
+```r
+
+# Set your path - this is where your data will be downloaded to
+
+path <- "path/to/somewhere/on/your/computer/or/OneDrive"
+
+# Download data
+
+wget https://raw.githubusercontent.com/theobrook/Silwood_Park_Soil_Metabarcoding_Practical/main/data/reads.fastq.gz
+
+# Check the data downloaded successfully
+
+list.files(path)
+
+# Set your save_path, this is where all your outputs will be saved
+
+save_path <- "path/to/somewhere/on/your/computer/or/OneDrive" # Not the same place as your path above
+```
 
 ## Task 2: Install and load packages (libraries)
 
@@ -56,4 +73,30 @@ fnRs <- sort(list.files(path, pattern="_2.fq", full.names = TRUE))
 # Extract sample names
 
 sample.names <- sapply(strsplit(basename(fnFs), "_"), function(x) paste(x[-length(x)], collapse = "_"))
+```
+
+## Task 4: Inspect read quality profiles ##
+
+```r
+# Forward reads
+
+quality_profiles_fnFs <- plotQualityProfile(fnFs[1:66])
+
+# Save - each sample as a separate PNG
+
+for (i in 1:31) {
+  p <- plotQualityProfile(fnFs[i])
+  ggsave(filename = file.path(save_path, paste0("quality_profiles/quality_profile_forward_", i, ".png")), 
+         plot = p, width = 10, height = 7)
+}
+
+# Reverse reads
+quality_profiles_fnRs <- plotQualityProfile(fnRs[1:66])
+
+# Save - each sample as a separate PNG
+for (i in 1:31) {
+  p <- plotQualityProfile(fnRs[i])
+  ggsave(filename = file.path(save_path, paste0("quality_profiles/quality_profile_reverse_", i, ".png")), 
+         plot = p, width = 10, height = 7)
+}
 ```
