@@ -42,7 +42,7 @@ wget https://raw.githubusercontent.com/theobrook/Silwood_Park_Soil_Metabarcoding
 list.files(path)
 
 # Set your save_path, this is where all your outputs will be saved
-save_path <- "path/to/somewhere/on/your/computer/or/OneDrive" # Not the same place as your path above
+save_path <- "path/to/somewhere/on/your/computer/or/OneDrive" # do not use the same location as your path above
 ```
 
 ## Task 2: Install and load packages (libraries)
