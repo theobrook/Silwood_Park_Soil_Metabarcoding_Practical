@@ -23,12 +23,34 @@ The specific aims are to:
 
 Here we are using **16S rRNA gene amplicon sequencing data generated on an Illumina MiSeq platform, targeting the bacterial community**.
 
+### Using R
+
+This practical relies on a basic understanding of the R language and R studio. I recommend that you create a new RStudio environment to run this analysis within.
+
 ## Task 1: Download data
 
 [Instructions and link for where students get the data]
 
-## Task 2: Load data
+## Task 2: Install and load packages (libraries)
 
 ```r
-library(x)
+# Install libraries
+install.packages(data2)
+install.packages(ggplot2)
+
+# Load libraries
+library(dada2)
+library(ggplot2)
+```
+
+## Task 3: Load data
+
+```r
+# Forward and reverse fastq filenames have format: SAMPLENAME_1.fq and SAMPLENAME_2.fq
+
+fnFs <- sort(list.files(path, pattern="_1.fq", full.names = TRUE))
+fnRs <- sort(list.files(path, pattern="_2.fq", full.names = TRUE))
+
+# Extract sample names
+sample.names <- sapply(strsplit(basename(fnFs), "_"), function(x) paste(x[-length(x)], collapse = "_"))
 ```
