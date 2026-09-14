@@ -4,12 +4,12 @@
 
 In this practical, we will go from raw sequences to community-level analyses. The samples used in this study were collected from the [Ecological Fractal Network](https://ecofracnetwork.github.io) points at Silwood Park. You can see the specific collection points [here](https://www.google.com/maps/d/viewer?mid=1gYaoOn5ypAK2B-bL8uXjdSTMu4CWCyI&ll=51.40958062885105%2C-0.6467416439178342&z=15).
 
-The specific aims are to: \
-**1.** Understand the output of a short-read sequencing machine \
-**2.** Perform quality control on raw sequencing reads \
-**3.** Perform community-level analyses using amplicon sequence variants (ASVs) \
-**4.** Assign taxonomy to ASVs, creating virtual taxa (VTs), and perform basic phylogenetic analysis \
-**5.** Love bioinformatics!
+The specific aims are to:
+1. Understand the output of a short-read sequencing machine
+2. Perform quality control on raw sequencing reads
+3. Perform community-level analyses using amplicon sequence variants (ASVs)
+4. Assign taxonomy to ASVs, creating virtual taxa (VTs), and perform basic phylogenetic analysis
+5. Love bioinformatics!
 
 This practical is an adaptation of the [DADA2 Pipeline Tutorial (1.16)](https://benjjneb.github.io/dada2/tutorial.html), a useful resource for beginners in microbial bioinformatics. If you have any questions, please reach out to Theodore Brook (`T.Brook@kew.org`).
 
