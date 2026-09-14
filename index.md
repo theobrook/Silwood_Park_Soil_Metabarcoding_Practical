@@ -35,10 +35,12 @@ This practical relies on a basic understanding of the R language and R studio. I
 
 ```r
 # Install libraries
+
 install.packages(data2)
 install.packages(ggplot2)
 
 # Load libraries
+
 library(dada2)
 library(ggplot2)
 ```
@@ -52,5 +54,6 @@ fnFs <- sort(list.files(path, pattern="_1.fq", full.names = TRUE))
 fnRs <- sort(list.files(path, pattern="_2.fq", full.names = TRUE))
 
 # Extract sample names
+
 sample.names <- sapply(strsplit(basename(fnFs), "_"), function(x) paste(x[-length(x)], collapse = "_"))
 ```
