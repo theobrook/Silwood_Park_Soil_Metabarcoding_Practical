@@ -43,7 +43,6 @@ list.files(path)
 
 # Set your save_path, this is where all your outputs will be saved
 save_path <- "path/to/somewhere/on/your/computer/or/OneDrive" # Not the same place as your path above
-
 ```
 
 ## Task 2: Install and load packages (libraries)
@@ -57,7 +56,6 @@ install.packages("ggplot2") # a package for plotting
 # Load libraries
 library(dada2)
 library(ggplot2)
-
 ```
 
 ## Task 3: Load data
@@ -73,7 +71,6 @@ fnRs <- sort(list.files(path, pattern="_2.fq", full.names = TRUE))
 
 # Extract sample names
 sample.names <- sapply(strsplit(basename(fnFs), "_"), function(x) paste(x[-length(x)], collapse = "_"))
-
 ```
 
 Before moving on, check that everything has loaded and paired up correctly:
@@ -82,7 +79,6 @@ Before moving on, check that everything has loaded and paired up correctly:
 # You should see one name per sample, and the two counts below should match
 sample.names
 length(fnFs) == length(fnRs)
-
 ```
 
 If `length(fnFs)` and `length(fnRs)` don't match, it usually means a forward or reverse file is missing for one sample — worth checking your `data` folder before continuing.
@@ -118,7 +114,6 @@ for (i in seq_along(fnRs)) {
   ggsave(filename = file.path(save_path, "quality_profiles", paste0("quality_profile_reverse_", sample.names[i], ".png")),
          plot = p, width = 10, height = 7)
 }
-
 ```
 
 **Checkpoint:** Look at your saved quality profiles. At roughly what position do the forward reads start to drop in quality? What about the reverse reads (these are usually a bit worse — can you think of why that might be)? Make a note of these positions, as you'll need them in the next task to set trimming lengths.
