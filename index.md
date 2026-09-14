@@ -21,7 +21,7 @@ The specific aims are to:
 - **Taxonomy assignment** = matching each ASV against a reference database to determine which organism (or group of organisms) it most likely came from.
 - **Virtual taxa (VT)** = clusters of ASVs that represent the same underlying taxon once taxonomy has been assigned, used to consolidate sequence-level variation into biologically meaningful groups for community analysis.
 
-Here we are using **16S rRNA gene amplicon sequencing data generated on an Illumina MiSeq platform, targeting the bacterial community**.
+Here we are using 16S rRNA **TBC!!!** gene amplicon sequencing data generated on an Illumina MiSeq platform, targeting the bacterial community.
 
 ### Using R
 
@@ -29,22 +29,20 @@ This practical relies on a basic understanding of the R and RStudio. I recommend
 
 ## Task 1: Download data
 
+We extracted DNA from the soil samples using the [Qiagen DNeasy PowerSoil Pro Kit](https://www.qiagen.com/us/products/discovery-and-translational-research/dna-rna-purification/dna-purification/microbial-dna/dneasy-powersoil-pro-kit) and sequenced the 16S rRNA gene. **TBC!!!** There is a fair amount of data, so you might want to consider downloading it to your Imperial OneDrive account.
+
 ```r
 
 # Set your path - this is where your data will be downloaded to
-
 path <- "path/to/somewhere/on/your/computer/or/OneDrive"
 
 # Download data
-
-wget https://raw.githubusercontent.com/theobrook/Silwood_Park_Soil_Metabarcoding_Practical/main/data/reads.fastq.gz
+wget https://raw.githubusercontent.com/theobrook/Silwood_Park_Soil_Metabarcoding_Practical/main/data/reads.fastq.gz # If you struggle with wget, you can download it manually to your desired folder
 
 # Check the data downloaded successfully
-
 list.files(path)
 
 # Set your save_path, this is where all your outputs will be saved
-
 save_path <- "path/to/somewhere/on/your/computer/or/OneDrive" # Not the same place as your path above
 
 ```
@@ -53,12 +51,10 @@ save_path <- "path/to/somewhere/on/your/computer/or/OneDrive" # Not the same pla
 
 ```r
 # Install libraries
-
 install.packages(data2)
 install.packages(ggplot2)
 
 # Load libraries
-
 library(dada2)
 library(ggplot2)
 
@@ -66,27 +62,43 @@ library(ggplot2)
 
 ## Task 3: Load data
 
-```r
-# Forward and reverse fastq filenames have format: SAMPLENAME_1.fq and SAMPLENAME_2.fq
+Amplicon sequencing such as this usually reads in both directions, creating forward and reverse reads for every DNA fragment. These are stored as two separate files per sample - usually distinguished by a suffix like `_1` (forward) and `_2` (reverse) — and need to be kept paired up, since each forward/reverse pair represents one sequenced fragment.
 
+The data must be read into the R environment. First point R at the folder containing your downloaded FASTQ files, then list and pair up the forward and reverse reads:
+
+```r
+# Set the path to your data folder (adjust this to wherever you unzipped/cloned the data)
+path <- "data"
+
+# Forward and reverse fastq filenames have format: SAMPLENAME_1.fq and SAMPLENAME_2.fq
 fnFs <- sort(list.files(path, pattern="_1.fq", full.names = TRUE))
 fnRs <- sort(list.files(path, pattern="_2.fq", full.names = TRUE))
 
 # Extract sample names
-
 sample.names <- sapply(strsplit(basename(fnFs), "_"), function(x) paste(x[-length(x)], collapse = "_"))
 
 ```
 
+Before moving on, check that everything has loaded and paired up correctly:
+
+```r
+# You should see one name per sample, and the two counts below should match
+sample.names
+length(fnFs) == length(fnRs)
+
+```
+
+If `length(fnFs)` and `length(fnRs)` don't match, it usually means a forward or reverse file is missing for one sample — worth checking your `data` folder before continuing.
+
 ## Task 4: Inspect read quality profiles ##
+
+It is important to inspect the read profiles to understand where to clip the data... **TBC!!!**
 
 ```r
 # Forward reads
-
 quality_profiles_fnFs <- plotQualityProfile(fnFs[1:66])
 
 # Save - each sample as a separate PNG
-
 for (i in 1:31) {
   p <- plotQualityProfile(fnFs[i])
   ggsave(filename = file.path(save_path, paste0("quality_profiles/quality_profile_forward_", i, ".png")), 
