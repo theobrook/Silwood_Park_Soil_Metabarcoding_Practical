@@ -41,18 +41,22 @@ This practical relies on a basic understanding of the R and RStudio. I recommend
 
 We extracted DNA from the soil samples using the [Qiagen DNeasy PowerSoil Pro Kit](https://www.qiagen.com/us/products/discovery-and-translational-research/dna-rna-purification/dna-purification/microbial-dna/dneasy-powersoil-pro-kit) and sequenced the 16S rRNA gene. **TBC!!!** There is a fair amount of data, so you might want to consider downloading it to your Imperial OneDrive account.
 
+Download the GitHub repository from [here](https://github.com/theobrook/Silwood_Park_Soil_Metabarcoding_Practical) and move the data directory (folder) to somewhere on your device. Unzip the directory to extract its contents.
+
+N.B. ou might want to use OneDrive as there is a large amount of data (**XGB - TBC!!!**).
+
 ```r
-# Set your path - this is where your data will be downloaded to
+# Set your path to where you moved the data directory to. You can find the full file path for a directory by right clicking on the folder and either (a) copying the "Where" field (Mac) or (b) selecting "Properties", and copying the "Location" field (Windows)
 path <- "path/to/somewhere/on/your/computer/or/OneDrive"
 
-# Download data
-wget https://raw.githubusercontent.com/theobrook/Silwood_Park_Soil_Metabarcoding_Practical/main/data/reads.fastq.gz # if you struggle with wget, you can download it manually to your desired folder
+# (Optional) Tidy up the zip file now that we have extracted its contents
+file.remove(zip_dest)
 
 # Check the data downloaded successfully
 list.files(path)
 
 # Set your save_path, this is where all your outputs will be saved
-save_path <- "path/to/somewhere/on/your/computer/or/OneDrive" # do not use the same location as your path above
+save_path <- file.path(pat, "outputs")
 ```
 
 ## Task 2: Install and load packages (libraries)
