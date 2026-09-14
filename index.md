@@ -60,7 +60,7 @@ library(ggplot2)
 
 ## Task 3: Load data
 
-Amplicon sequencing such as this usually reads in both directions, creating forward and reverse reads for every DNA fragment. These are stored as two separate files per sample - usually distinguished by a suffix like `_1` (forward) and `_2` (reverse) — and need to be kept paired up, since each forward/reverse pair represents one sequenced fragment.
+Amplicon sequencing such as this usually reads in both directions, creating forward and reverse reads for every DNA fragment. These are stored as two separate files per sample - usually distinguished by a suffix like `_1` (forward) and `_2` (reverse) - and need to be kept paired up, since each forward/reverse pair represents one sequenced fragment.
 
 The data must be read into the R environment. First point R at the folder containing your downloaded FASTQ files, then list and pair up the forward and reverse reads:
 
@@ -81,7 +81,7 @@ sample.names
 length(fnFs) == length(fnRs)
 ```
 
-If `length(fnFs)` and `length(fnRs)` don't match, it usually means a forward or reverse file is missing for one sample — worth checking your `data` folder before continuing.
+If `length(fnFs)` and `length(fnRs)` don't match, it usually means a forward or reverse file is missing for one sample. Double check your `data` folder before continuing.
 
 ## Task 4: Inspect read quality profiles
 
@@ -116,4 +116,4 @@ for (i in seq_along(fnRs)) {
 }
 ```
 
-**Checkpoint:** Look at your saved quality profiles. At roughly what position do the forward reads start to drop in quality? What about the reverse reads (these are usually a bit worse — can you think of why that might be)? Make a note of these positions, as you'll need them in the next task to set trimming lengths.
+**Checkpoint:** Look at your saved quality profiles. At roughly what position do the forward reads start to drop in quality? What about the reverse reads (these are usually a bit worse, can you think of why that might be)? Make a note of these positions, as you'll need them in the next task to set trimming lengths.
