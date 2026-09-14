@@ -4,6 +4,8 @@
 
 In this practical, we will go from raw sequences to community-level analyses. The samples used in this study were collected from the [Ecological Fractal Network](https://ecofracnetwork.github.io) points at Silwood Park. You can see the specific collection points [here](https://www.google.com/maps/d/viewer?mid=1gYaoOn5ypAK2B-bL8uXjdSTMu4CWCyI&ll=51.40958062885105%2C-0.6467416439178342&z=15).
 
+This practical is an adaptation of the [DADA2 Pipeline Tutorial (1.16)](https://benjjneb.github.io/dada2/tutorial.html), a useful resource for beginners in microbial bioinformatics.
+
 The specific aims are to:
 1. Understand the output of a short-read sequencing machine
 2. Perform quality control on raw sequencing reads
@@ -117,3 +119,38 @@ for (i in seq_along(fnRs)) {
 ```
 
 **Checkpoint:** Look at your saved quality profiles. At roughly what position do the forward reads start to drop in quality? What about the reverse reads (these are usually a bit worse, can you think of why that might be)? Make a note of these positions, as you'll need them in the next task to set trimming lengths.
+
+## Task 5: Filter and trim reads
+
+Now we have an idea of the quality of our sequences, we need to filter and trim sequences to remove low quality regions.
+
+# Place filtered files in filtered/ subdirectory
+filtFs <- file.path(save_path, "filtered", paste0(sample.names, "_F_filt.fastq.gz"))
+filtRs <- file.path(save_path, "filtered", paste0(sample.names, "_R_filt.fastq.gz"))
+names(filtFs) <- sample.names
+names(filtRs) <- sample.names
+
+# Filter and trim
+out <- filterAndTrim(fnFs, filtFs, fnRs, filtRs, 
+                     truncLen = c(240, 210),
+                     maxN = 0, 
+                     maxEE = c(2, 2), 
+                     truncQ = 2, 
+                     rm.phix = TRUE,
+                     compress = TRUE, 
+                     multithread = FALSE)
+
+head(out)
+saveRDS(out, file = file.path(save_path, "out.rds"))
+
+# Continue after filtering
+filt_path <- file.path(save_path, "filtered")
+
+# List filtered files
+filtFs <- sort(list.files(filt_path, pattern="_F_filt.fastq.gz", full.names = TRUE))
+filtRs <- sort(list.files(filt_path, pattern="_R_filt.fastq.gz", full.names = TRUE))
+
+# Extract sample names from filtered files
+sample.names <- sapply(strsplit(basename(filtFs), "_"), 
+                       function(x) paste(x[1:(length(x)-3)], collapse="_"))
+
