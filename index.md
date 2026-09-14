@@ -35,7 +35,7 @@ This practical relies on a basic understanding of the R and RStudio. I recommend
 - [phyloseq website](https://joey711.github.io/phyloseq/) - details of the `phyloseq` package
 - [ggplot2 website](https://ggplot2.tidyverse.org/) - details of the `ggplot2` package
 
-*LLMs such as Claude and ChatGPT can be very useful but be careful to double check that you understand what they are doing (and that they are doing what you want)!*
+*LLMs such as Claude can be useful, but be careful to check that you understand what they are doing and, crucially, that they are actually doing what you want!*
 
 ## Task 1: Download data
 
@@ -65,6 +65,7 @@ install.packages("ggplot2") # a package for plotting
 
 # Load libraries
 library(dada2)
+library(phyloseq)
 library(ggplot2)
 ```
 
@@ -91,7 +92,7 @@ sample.names
 length(fnFs) == length(fnRs)
 ```
 
-If `length(fnFs)` and `length(fnRs)` don't match, it usually means a forward or reverse file is missing for one sample. Double check your `data` folder before continuing.
+**Checkpoint:** If `length(fnFs)` and `length(fnRs)` don't match, it usually means a forward or reverse file is missing for one sample. Double check your `data` folder before continuing.
 
 ## Task 4: Inspect read quality profiles
 
@@ -161,8 +162,7 @@ filtFs <- sort(list.files(filt_path, pattern="_F_filt.fastq.gz", full.names = TR
 filtRs <- sort(list.files(filt_path, pattern="_R_filt.fastq.gz", full.names = TRUE))
 
 # Extract sample names from filtered files
-sample.names <- sapply(strsplit(basename(filtFs), "_"), 
-                       function(x) paste(x[1:(length(x)-3)], collapse="_"))
+sample.names <- sapply(strsplit(basename(filtFs), "_"), function(x) paste(x[1:(length(x)-2)], collapse="_"))
 ```
 
 **Checkpoint:** You must set `X` and `Y` to the end position you want to truncate the forward and reverse reads to. For example, as these are 250 base pair fragments, to trim the last 30 bases off the forward reads, you would set X to 220.
