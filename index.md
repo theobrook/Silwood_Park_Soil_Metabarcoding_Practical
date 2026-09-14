@@ -2,7 +2,7 @@
 
 ## Introduction
 
-In this practical, we will go from raw reads (i.e., a raw, short sequence of nucleotide bases outputted from a sequencing machine) to community analyses. The samples used in this study were collected from the [Ecological Fractal Network](https://ecofracnetwork.github.io) points at Silwood Park. You can see the specific collection points [here](https://www.google.com/maps/d/viewer?mid=1gYaoOn5ypAK2B-bL8uXjdSTMu4CWCyI&ll=51.40958062885105%2C-0.6467416439178342&z=15).
+In this practical, we will go from raw sequences to community-level analyses. The samples used in this study were collected from the [Ecological Fractal Network](https://ecofracnetwork.github.io) points at Silwood Park. You can see the specific collection points [here](https://www.google.com/maps/d/viewer?mid=1gYaoOn5ypAK2B-bL8uXjdSTMu4CWCyI&ll=51.40958062885105%2C-0.6467416439178342&z=15).
 
 The specific aims are to:
 1. Understand the output of a short-read sequencing machine
@@ -11,13 +11,21 @@ The specific aims are to:
 4. Assign taxonomy to ASVs, creating virtual taxa (VTs)
 5. Love bioinformatics!
 
-Here we are using 
+### Key terms
 
-Some **bold text**, some *italic text*, and a [link](https://example.com).
+- **Amplicon sequencing (metabarcoding)** = a technique where a specific, short region of DNA (the "marker gene") shared by many organisms is amplified via PCR and sequenced from a mixed environmental sample. This lets us profile every organism present at once rather than sequencing one species at a time.
+- **Short-read sequencing** = a sequencing technology (e.g., Illumina platforms) that reads DNA in short fragments (usually 50–300 base pairs long). Although "long-read" technologies which read thousands of bases at once are available, short reads are cheaper but require more computational work to reconstruct the full picture.
+- **Raw sequencing reads** = the unprocessed output straight off the sequencing machine, usually stored as FASTQ files, containing both the DNA sequence and a quality score for each base call.
+- **Quality control (QC)** = the process of filtering and trimming raw reads to remove low-quality base calls, sequencing adapters, and other artefacts before any biological analysis, so downstream results reflect real biology rather than sequencing noise.
+- **Amplicon sequence variant (ASV)** = a unique DNA sequence recovered from your samples, inferred at single-nucleotide resolution. ASVs are the modern, higher-resolution replacement for the older approach of clustering reads into OTUs (operational taxonomic units).
+- **Taxonomy assignment** = matching each ASV against a reference database to determine which organism (or group of organisms) it most likely came from.
+- **Virtual taxa (VT)** = clusters of ASVs that represent the same underlying taxon once taxonomy has been assigned, used to consolidate sequence-level variation into biologically meaningful groups for community analysis.
+
+Here we are using **16S rRNA gene amplicon sequencing data generated on an Illumina MiSeq platform, targeting the bacterial community**.
 
 ## Task 1: Download data
 
-Copy data from here
+[Instructions and link for where students get the data]
 
 ## Task 2: Load data
 
