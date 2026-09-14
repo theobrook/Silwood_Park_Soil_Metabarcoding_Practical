@@ -1,4 +1,4 @@
-# Silwood Park Metabarocding practical
+# Metabarocding practical - using soil samples from Silwood Park
 
 ## Introduction
 Some **bold text**, some *italic text*, and a [link](https://example.com).
