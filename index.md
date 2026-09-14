@@ -138,12 +138,13 @@ Now we have an idea of the quality of our sequences, we need to filter and trim 
 # Place filtered files in filtered/ subdirectory
 filtFs <- file.path(save_path, "filtered", paste0(sample.names, "_F_filt.fastq.gz"))
 filtRs <- file.path(save_path, "filtered", paste0(sample.names, "_R_filt.fastq.gz"))
+
 names(filtFs) <- sample.names
 names(filtRs) <- sample.names
 
 # Filter and trim
 out <- filterAndTrim(fnFs, filtFs, fnRs, filtRs, 
-                     truncLen = c(240, 210),
+                     truncLen = c(X, Y),
                      maxN = 0, 
                      maxEE = c(2, 2), 
                      truncQ = 2, 
@@ -165,3 +166,5 @@ filtRs <- sort(list.files(filt_path, pattern="_R_filt.fastq.gz", full.names = TR
 sample.names <- sapply(strsplit(basename(filtFs), "_"), 
                        function(x) paste(x[1:(length(x)-3)], collapse="_"))
 ```
+
+**Checkpoint:** You must set `X` and `Y` to the end position you want to truncate the forward and reverse reads to. For example, as these are 250 base pair fragments, to trim the last 30 bases off the forward reads, you would set X to 220.
