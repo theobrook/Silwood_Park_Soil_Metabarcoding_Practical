@@ -1,3 +1,5 @@
+# Silwood Park Soil Metabarcoding Practical
+
 ## Introduction
 
 In this practical, we will go from raw sequences to community-level analyses. The samples used in this study were collected from the [Ecological Fractal Network](https://ecofracnetwork.github.io) points at Silwood Park. You can see the specific collection points [here](https://www.google.com/maps/d/viewer?mid=1gYaoOn5ypAK2B-bL8uXjdSTMu4CWCyI&ll=51.40958062885105%2C-0.6467416439178342&z=15).
@@ -23,7 +25,7 @@ Here we are using **16S rRNA gene amplicon sequencing data generated on an Illum
 
 ### Using R
 
-This practical relies on a basic understanding of the R language and R studio. I recommend that you create a new RStudio environment to run this analysis within.
+This practical relies on a basic understanding of the R and RStudio. I recommend that you create a new RStudio environment to run this analysis within.
 
 ## Task 1: Download data
 
