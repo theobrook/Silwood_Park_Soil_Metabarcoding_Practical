@@ -7,7 +7,7 @@ Some **bold text**, some *italic text*, and a [link](https://example.com).
 
 Copy data from here
 
-## Task 2: Check the projection
+## Task 2: Load data
 
 ```r
 library(x)
