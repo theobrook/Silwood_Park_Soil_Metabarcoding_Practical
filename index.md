@@ -23,11 +23,15 @@ This practical is an adaptation of the [DADA2 Pipeline Tutorial (1.16)](https://
 - **Taxonomy assignment** = matching each ASV against a reference database to determine which organism (or group of organisms) it most likely came from.
 - **Virtual taxa (VT)** = clusters of ASVs that represent the same underlying taxon once taxonomy has been assigned, used to consolidate sequence-level variation into biologically meaningful groups for community analysis.
 
-Here we are using 16S rRNA **TBC!!!** gene amplicon sequencing data generated on an Illumina MiSeq platform, targeting the bacterial community.
+## The data
+
+**This practical is currently set up to process one marker type (e.g., 16S, ITS). It can easily be updated if we want to use multiple markers.**
+
+The samples were sequenced on an Illumina MiSeq platform.
 
 ### Using R
 
-This practical relies on a basic understanding of the R and RStudio. I recommend that you create a new RStudio environment to run this analysis within.
+This practical relies on a basic understanding of the programming language `R`. I recommend that you create a new `RStudio` environment in a `Silwood_Soil_Metabarcoding_Practical” directory to run this analysis within.
 
 ### Useful websites
 - [Stack Overflow](https://stackoverflow.com/) - a site for programmers to discuss issues/problems
