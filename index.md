@@ -1,4 +1,4 @@
-# Silwood Park Soil Metabarcoding Practical
+# Metabarcoding Practical - Silwood Park
 
 ## Introduction
 
