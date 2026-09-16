@@ -224,4 +224,53 @@ dadaRs <- readRDS(file.path(save_path, "dadaRs.rds"))
 **Checkpoint:** Look at the printed summary for `dadaFs[[1]]` - it should read something like `X sequence variants were inferred from Y input unique sequences.` Why is X usually much smaller than Y? What does that tell you about the relationship between unique sequences and real biological variants?
 ```
 
-## Task 8: Sample inference
+## Task 8: Merge paired reads
+
+Now that both the forward and reverse reads have been denoised separately, `mergePairs()` combines each pair back into a single, full-length sequence, only keeping pairs where the forward and reverse reads overlap and agree.
+
+```r
+mergers <- mergePairs(dadaFs, filtFs, dadaRs, filtRs, verbose = TRUE)
+saveRDS(mergers, file = file.path(save_path, "merged_pairs.rds"))
+
+# Inspect the merged pairs for the first sample
+head(mergers[[1]])
+```
+
+## Task 9: Construct sequence table
+
+We can now build a sequence table. This is a matrix of samples (rows) by unique sequence variants (columns), with the number of reads of each variant found in each sample as the values. Well done - this is the community data matrix that later analyses will be built on!
+
+```r
+seqtab <- makeSequenceTable(mergers)
+dim(seqtab)
+
+# Save the sequence table
+write.csv(as.data.frame(t(seqtab)), file = file.path(save_path, "sequence_table.csv"))
+
+# Inspect the distribution of sequence lengths
+seq_length_distribution <- table(nchar(getSequences(seqtab)))
+write.csv(as.data.frame(seq_length_distribution),
+          file = file.path(save_path, "sequence_length_distribution.csv"))
+```
+
+**Checkpoint:** Open `sequence_length_distribution.csv` in (e.g.) Excel. Given your amplicon target, what length would you expect most sequences to be? Are there any sequences at unexpected lengths, and if so, what might explain them? **Optional extension:** filter `seqtab` down to only the expected length range before continuing — e.g. `seqtab <- seqtab[, nchar(colnames(seqtab)) %in% seq(250, 256)]`, adjusted to your expected range.)
+
+## Task 10: Remove chimeras
+
+PCR can occasionally stitch together fragments from two different source sequences mid-amplification, producing artificial "chimeric" sequences - think creature with a lion's head, a goat's body, and a snake's tail - that look like a real variant but are not. `removeBimeraDenovo()` identifies and removes these before we move on to taxonomy.
+
+```r
+seqtab.nochim <- removeBimeraDenovo(seqtab, method = "consensus",
+                                    multithread = TRUE, verbose = TRUE)
+dim(seqtab.nochim)
+saveRDS(seqtab.nochim, file = file.path(save_path, "seqtab.nochim.rds"))
+
+# Save the chimera-free sequence table
+write.csv(as.data.frame(t(seqtab.nochim)),
+          file = file.path(save_path, "sequence_table_no_chimeras.csv"))
+
+# Proportion of non-chimeric sequences
+cat("\nProportion of non-chimeric sequences:", sum(seqtab.nochim)/sum(seqtab), "\n")
+```
+
+**Checkpoint:** What proportion of your reads were identified as chimeric? A high proportion of chimeras can sometimes indicate an issue earlier in the pipeline (e.g. truncation lengths that don't allow enough overlap for merging). Does your result seem reasonable?
