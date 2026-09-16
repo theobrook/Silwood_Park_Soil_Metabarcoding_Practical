@@ -1,4 +1,4 @@
-# Bioinformatics with metabarcoding data practical
+# Bioinformatics using metabarcoding data practical
 
 ## Introduction
 
