@@ -1,4 +1,4 @@
-# Bioinformatics with metabarcoding data - practical
+# Bioinformatics with metabarcoding data practical
 
 ## Introduction
 
@@ -176,3 +176,52 @@ sample.names <- sapply(strsplit(basename(filtFs), "_"), function(x) paste(x[1:(l
 ```
 
 **Checkpoint:** You must set `X` and `Y` to the end position you want to truncate the forward and reverse reads to. For example, as these are 250 base pair fragments, to trim the last 30 bases off the forward reads, you would set X to 220.
+
+## Task 6: Learn error rates 
+
+DADA2's core denoising step needs to know what real **sequencing error** looks like before it can distinguish true biological variation and noise. The `learnErrors()` function estimates this by alternating between guessing the error rates and inferring the sample composition until the estimate converges. This producing a model of how likely each type of base-calling error is, at each quality score and at each position along the read. This step can take some time to run, especially on a laptop.
+
+```r
+errF <- learnErrors(filtFs, multithread = TRUE)
+errR <- learnErrors(filtRs, multithread = TRUE)
+
+# Save the error models so you don't have to re-run this step if you close R
+saveRDS(errF, file = file.path(save_path, "errF.rds"))
+saveRDS(errR, file = file.path(save_path, "errR.rds"))
+
+# Visualise the estimated error rates
+error_plot_F <- plotErrors(errF, nominalQ = TRUE)
+ggsave(filename = file.path(save_path, "error_plot_forward.png"), plot = error_plot_F)
+
+error_plot_R <- plotErrors(errR, nominalQ = TRUE)
+ggsave(filename = file.path(save_path, "error_plot_reverse.png"), plot = error_plot_R)
+```
+
+## Task 7: Sample inference
+
+This is the core denoising step of the DADA2 pipeline. Using the error model learned in **Task 6**, the `dada()` function looks at every unique sequence in each sample and works out which ones represent real biological variants and which are more likely sequencing errors of a more abundant "true" sequence. We now have our **amplicon sequence variants (ASVs)**! 
+
+Note that this is applied separately to the forward and reverse reads. This is usually the slowest step in the whole pipeline, so it will take a while (Windows users especially, since this step doesn't multithread the same way it does on Mac/Linux). **So take a break!**
+
+```r
+# Run the core DADA2 denoising algorithm on the forward and reverse reads
+dadaFs <- dada(filtFs, err = errF, multithread = TRUE)
+dadaRs <- dada(filtRs, err = errR, multithread = TRUE)
+
+# Inspect the returned dada-class object for the first sample
+dadaFs[[1]]
+dadaRs[[1]]
+
+# Save RDS - this allows you to reload the R data, rather than running the whole script above (e.g. if your R session crashes for whatever reason)
+saveRDS(dadaFs, file = file.path(save_path, "dadaFs.rds"))
+saveRDS(dadaRs, file = file.path(save_path, "dadaRs.rds"))
+
+# If necessary, you can reload the data if there is an issue
+dadaFs <- readRDS(file.path(save_path, "dadaFs.rds"))
+dadaRs <- readRDS(file.path(save_path, "dadaRs.rds"))
+```
+
+**Checkpoint:** Look at the printed summary for `dadaFs[[1]]` - it should read something like `X sequence variants were inferred from Y input unique sequences.` Why is X usually much smaller than Y? What does that tell you about the relationship between unique sequences and real biological variants?
+```
+
+## Task 8: Sample inference
