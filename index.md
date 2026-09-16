@@ -2,7 +2,7 @@
 title: Bioinformatics using metabarcoding data practical
 ---
 
-## Introduction
+# Introduction
 
 In this practical, we will go from raw sequences to community-level analyses. The samples used in this study were collected from the [Ecological Fractal Network](https://ecofracnetwork.github.io) points at Silwood Park. You can see the specific collection points [here](https://www.google.com/maps/d/viewer?mid=1gYaoOn5ypAK2B-bL8uXjdSTMu4CWCyI&ll=51.40958062885105%2C-0.6467416439178342&z=15).
 
@@ -42,6 +42,8 @@ This practical relies on a basic understanding of the programming language `R`. 
 - [ggplot2 website](https://ggplot2.tidyverse.org/) - details of the `ggplot2` package
 
 *LLMs such as Claude can be useful, but be careful to check that you understand what they are doing and, crucially, that they are actually doing what you want!*
+
+# Section 1: DADA2
 
 ## Task 1: Download data
 
@@ -276,3 +278,5 @@ cat("\nProportion of non-chimeric sequences:", sum(seqtab.nochim)/sum(seqtab), "
 ```
 
 **Checkpoint:** What proportion of your reads were identified as chimeric? A high proportion of chimeras can sometimes indicate an issue earlier in the pipeline (e.g. truncation lengths that don't allow enough overlap for merging). Does your result seem reasonable?
+
+# Section 2: phyloseq
