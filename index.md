@@ -23,7 +23,7 @@ This practical is an adaptation of the [DADA2 Pipeline Tutorial (1.16)](https://
 - **Taxonomy assignment** = matching each ASV against a reference database to determine which organism (or group of organisms) it most likely came from.
 - **Virtual taxa (VT)** = clusters of ASVs that represent the same underlying taxon once taxonomy has been assigned, used to consolidate sequence-level variation into biologically meaningful groups for community analysis.
 
-## The data
+### The data
 
 **This practical is currently set up to process one marker type (e.g., 16S, ITS). It can easily be updated if we want to use multiple markers.**
 
