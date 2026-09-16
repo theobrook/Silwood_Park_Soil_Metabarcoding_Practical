@@ -1,4 +1,4 @@
-# Metabarcoding Practical - Silwood Park
+# Bioinformatics with metabarcoding data - practical
 
 ## Introduction
 
