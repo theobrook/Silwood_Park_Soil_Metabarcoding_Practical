@@ -40,10 +40,9 @@ This practical relies on a basic understanding of the programming language `R`. 
 - [DADA2 website](https://benjjneb.github.io/dada2/) - details of the `DADA2` package
 - [phyloseq website](https://joey711.github.io/phyloseq/) - details of the `phyloseq` package
 - [ggplot2 website](https://ggplot2.tidyverse.org/) - details of the `ggplot2` package
-\\
+
+
 *LLMs such as Claude can be useful, but be careful to check that you understand what they are doing and, crucially, that they are actually doing what you want!*
-
-
 
 # Section 1: Set up
 
