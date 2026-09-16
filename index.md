@@ -43,7 +43,9 @@ This practical relies on a basic understanding of the programming language `R`. 
 
 *LLMs such as Claude can be useful, but be careful to check that you understand what they are doing and, crucially, that they are actually doing what you want!*
 
-# Section 1: DADA2
+
+
+# Section 1: Set up
 
 ## Task 1: Download data
 
@@ -76,12 +78,18 @@ save_path <- file.path(pat, "outputs")
 install.packages("dada2") # a bioinformatic package to denoise amplicon sequencing data and infer ASVs
 install.packages("phyloseq") # a bioinformatic package to import, store, analyse, and plot microbiome (and phylogenetic) sequencing data
 install.packages("ggplot2") # a package for plotting
+install.packages("vegan") # a useful package for community ecology
+install.packages("Biostrings") # a memory-efficient package for the handling of large biological sequences (e.g., DNA, RNA, and proteins)
 
 # Load libraries
 library(dada2)
 library(phyloseq)
 library(ggplot2)
+library(vegan)
+library(Biostrings)
 ```
+
+# Section 2: Sample processing, from raw reads to ASVs and VTs
 
 ## Task 3: Load data
 
@@ -279,4 +287,126 @@ cat("\nProportion of non-chimeric sequences:", sum(seqtab.nochim)/sum(seqtab), "
 
 **Checkpoint:** What proportion of your reads were identified as chimeric? A high proportion of chimeras can sometimes indicate an issue earlier in the pipeline (e.g. truncation lengths that don't allow enough overlap for merging). Does your result seem reasonable?
 
-# Section 2: phyloseq
+## Task 11: Track reads through the pipeline
+
+As we saw, we dropped reads at each stage of the pipeline (e.g., failing quality filters, failing to denoise, failing to merge, or turning out to be chimeric). It's good practice to track how many reads survive at each stage, especially because a sudden, large drop at any one step is often the first sign something upstream needs adjusting.
+
+```r
+getN <- function(x) sum(getUniques(x))
+track <- cbind(out,
+               sapply(dadaFs, getN),
+               sapply(dadaRs, getN),
+               sapply(mergers, getN),
+               rowSums(seqtab.nochim))
+colnames(track) <- c("input", "filtered", "denoisedF", "denoisedR", "merged", "nonchim")
+rownames(track) <- sample.names
+head(track)
+
+write.csv(track, file = file.path(save_path, "tracking_pipeline.csv"), row.names = TRUE)
+```
+
+**Checkpoint:** Open `tracking_pipeline.csv`. Is there a step where you lost an unusually large proportion of reads for any sample? What might that indicate, and which earlier task's parameters would you revisit to investigate?
+
+## Task 12: Export ASV sequences
+
+It's useful to have your ASVs as a standalone FASTA file, for example for building a phylogenetic tree (see below) or for searching sequences manually.
+
+```r
+asv_seqs <- colnames(seqtab.nochim)
+asv_dna <- DNAStringSet(asv_seqs)
+names(asv_dna) <- paste0("ASV", seq_along(asv_seqs))
+writeXStringSet(asv_dna, filepath = file.path(save_path, "seqtab_asvs.fasta"))
+```
+
+## Task 13: Assign taxonomy
+
+Taxonomy assignment against a full reference database can take hours to run, so rather than have you run it live, we've pre-computed it for you. `assignTaxonomy()` classifies each ASV against a reference database (down to genus level), and `addSpecies()` adds species-level calls where the match is confident enough.
+
+```r
+# For reference, this is what generated the results you're loading below
+# (you do not need to run this - it can take hours):
+# taxa <- assignTaxonomy(seqtab.nochim, "**TBC!!! path to reference database**", multithread = TRUE)
+# species <- addSpecies(taxa, "**TBC!!! path to species reference**")
+
+taxa <- readRDS("**TBC!!! path/URL for students to fetch taxa.rds**")
+species <- readRDS("**TBC!!! path/URL for students to fetch species.rds**")
+
+write.csv(as.data.frame(taxa), file = file.path(save_path, "taxonomy_assignment.csv"))
+write.csv(as.data.frame(species), file = file.path(save_path, "species_assignment.csv"))
+
+# Preview (without the long ASV sequence as rownames, for readability)
+taxa.print <- taxa
+rownames(taxa.print) <- NULL
+tail(taxa.print)
+```
+
+## Task 14: Inspect rarefaction curves
+
+Due to forces outside our control, different samples were sequenced to different depths and so richness estimates aren't directly comparable across samples until that's accounted for. Before deciding how to normalise, it's worth plotting rarefaction curves. These curves show us how many ASVs you'd expect to detect as sequencing depth increases, and whether each sample's curve has flattened off (suggesting you've sampled most of its diversity) or is still climbing (suggesting deeper sequencing would find more).
+
+```r
+# Exclude samples with very low read counts before considering a rarefaction depth
+min_reads_threshold <- 500
+keep_samples <- rowSums(seqtab.nochim) >= min_reads_threshold
+seqtab_keep <- seqtab.nochim[keep_samples, ]
+cat("Samples retained:", nrow(seqtab_keep), "of", nrow(seqtab.nochim), "\n")
+
+raref_plot_dir <- file.path(save_path, "rarefaction_curves")
+dir.create(raref_plot_dir, recursive = TRUE, showWarnings = FALSE)
+
+pdf(file.path(raref_plot_dir, "rarefaction_curves.pdf"), width = 10, height = 8)
+rarecurve(seqtab_keep, step = 50, col = "steelblue", label = TRUE, cex = 0.7,
+          main = "Rarefaction curves for all samples",
+          xlab = "Sequencing depth (reads per sample)",
+          ylab = "Observed ASV richness")
+dev.off()
+```
+
+**Checkpoint:** Open the rarefaction curve PDF. Have all retained samples' curves flattened off? Are there any samples with an unusually low read depth that you'd consider excluding entirely, rather than letting them drag down the rarefaction depth for every other sample?
+
+## Task 15: Rarefy the sequence table
+
+Having inspected the curves, we now rarefy every retained sample down to the same read depth — the minimum depth among the samples you decided to keep in Task 14 — so richness/diversity comparisons between samples aren't confounded by differences in sequencing depth.
+
+```r
+set.seed(123) # for reproducibility
+min_depth <- min(rowSums(seqtab_keep))
+cat("Rarefying to depth:", min_depth, "\n")
+
+seqtab.nochim.rarefied <- rrarefy(seqtab_keep, sample = min_depth)
+
+# Drop any ASVs that are now entirely absent
+seqtab.nochim.rarefied <- seqtab.nochim.rarefied[, colSums(seqtab.nochim.rarefied) > 0]
+cat("ASVs retained after rarefaction:", ncol(seqtab.nochim.rarefied),
+    "out of", ncol(seqtab.nochim), "\n")
+
+saveRDS(seqtab.nochim.rarefied, file = file.path(save_path, "seqtab.nochim.rarefied.rds"))
+write.csv(as.data.frame(t(seqtab.nochim.rarefied)),
+          file = file.path(save_path, "sequence_table_no_chimeras_rarefied.csv"))
+
+rarefaction_summary <- data.frame(
+  sample = rownames(seqtab_keep),
+  original_depth = rowSums(seqtab_keep),
+  rarefied_depth = rowSums(seqtab.nochim.rarefied),
+  percent_retained = round((rowSums(seqtab.nochim.rarefied) / rowSums(seqtab_keep)) * 100, 2)
+)
+write.csv(rarefaction_summary, file = file.path(save_path, "rarefaction_summary.csv"), row.names = FALSE)
+```
+
+## Task 16: Match taxonomy to the rarefied ASVs
+
+Since rarefaction can drop some ASVs entirely, subset your taxonomy tables so they only contain the ASVs still present in your rarefied data.
+
+```r
+rarefied_asvs <- colnames(seqtab.nochim.rarefied)
+
+taxa_rarefied <- taxa[rownames(taxa) %in% rarefied_asvs, , drop = FALSE]
+species_rarefied <- species[rownames(species) %in% rarefied_asvs, , drop = FALSE]
+
+saveRDS(taxa_rarefied, file = file.path(save_path, "taxa_rarefied.rds"))
+saveRDS(species_rarefied, file = file.path(save_path, "species_rarefied.rds"))
+write.csv(as.data.frame(taxa_rarefied), file = file.path(save_path, "taxonomy_assignment_rarefied.csv"))
+write.csv(as.data.frame(species_rarefied), file = file.path(save_path, "species_assignment_rarefied.csv"))
+```
+
+# Section 3: Community-level analysis
